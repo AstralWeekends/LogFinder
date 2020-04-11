@@ -1,7 +1,6 @@
 import os
 import fnmatch
 import re
-#test branch comment
 
 def testmethod(wo_num, pb_num, mb_num):
     print("Work Order: " + wo_num)
@@ -30,7 +29,6 @@ def mainmethod():
     # Create a list of files in the directory which match one of the regexes in log-regex.txt
     if trigger == 'y':
         filelist = []
-        searchlist = [workorder, packbatch, masterbatch]
         for regex in fileregex:
             for file in os.listdir(searchdir):
                 if fnmatch.fnmatch(file, regex):
@@ -71,3 +69,5 @@ def mainmethod():
         results = list(dict.fromkeys(results))
 
     print(results)
+
+#mainmethod()
