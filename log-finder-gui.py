@@ -10,6 +10,7 @@ layout = [  [sg.Text("Work Order #:")],
             [sg.InputText(key='_PACKBATCH_')],
             [sg.Text("Master Batch #:")],
             [sg.InputText(key='_MASTERBATCH_')],
+            [sg.Text("Environment:"), sg.Combo(['Prod', 'Test'], key='_ENVIRONMENT_', default_value='Prod')],
             [sg.Button('Run'), sg.Button('Cancel')] ]
 
 # Create actual window to display
@@ -21,6 +22,6 @@ while True:
     if event in (None, 'Cancel'):
         break
     if event == 'Run':
-        logfinder.testmethod(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'])
+        logfinder.testmethod(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
 
 window.close()
