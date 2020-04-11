@@ -22,6 +22,10 @@ while True:
     if event in (None, 'Cancel'):
         break
     if event == 'Run':
-        logfinder.testmethod(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
-
+        results = logfinder.mainmethod(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
+        if len(results) == 0:
+            print("Search complete, no logs found.")
+        else:
+            results = list(dict.fromkeys(results))
+            print(results)
 window.close()

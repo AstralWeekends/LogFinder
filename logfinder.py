@@ -20,22 +20,17 @@ def mainmethod(workorder, packbatch, masterbatch, environ):
     #environ = input("Enter the Environment ('Test' or 'Prod'): ")[0].lower()
 
     # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
-    if environ == 't':
+    if environ == 'Test':
         searchdir = '/home/alec/Documents/Python/Log-Finder/Test/'
-    elif environ == 'p':
+    elif environ == 'Prod':
         searchdir = '/home/alec/Documents/Python/Log-Finder/Prod/'
 
-    trigger = input("Ready to search ('y' or 'n')?: ").lower()
-
     # Create a list of files in the directory which match one of the regexes in log-regex.txt
-    if trigger == 'y':
-        filelist = []
-        for regex in fileregex:
-            for file in os.listdir(searchdir):
-                if fnmatch.fnmatch(file, regex):
-                    filelist.append(searchdir + file)
-    else:
-        quit()
+    filelist = []
+    for regex in fileregex:
+        for file in os.listdir(searchdir):
+            if fnmatch.fnmatch(file, regex):
+                filelist.append(searchdir + file)
 
     # Check to make sure at least 1 file in the directory matched a file regex:
     if len(filelist) < 1:
@@ -63,12 +58,6 @@ def mainmethod(workorder, packbatch, masterbatch, environ):
             if re.search(regex, text):
                 results.append(filecontents.get(text))
 
-    # Check if any results - if there are, remove duplicates from result list.
-    if len(results) == 0:
-        print("Search complete, no logs found.")
-    else:
-        results = list(dict.fromkeys(results))
-
-    print(results)
+    return(results)
 
 #mainmethod()
