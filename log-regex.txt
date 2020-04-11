@@ -1,0 +1,9 @@
+*RulesService*.log
+*Finalizer*.log
+*SqlRelease*.log
+*Sequencer*.log
+*Inserter*.log
+*Validat*.log
+*Kfi*.log
+*Assembl*.log
+*MOCK_DATA*.txt
