@@ -8,16 +8,10 @@ def testmethod(wo_num, pb_num, mb_num, environ):
     print("Master Batch: " + mb_num)
     print("Environment: " + environ)
 
-def mainmethod(workorder, packbatch, masterbatch, environ):
+def hunt(workorder, packbatch, masterbatch, environ):
     # Create a list of file regexes to use for search, read in from external file.
     with open('/home/alec/Documents/Python/Log-Finder/log-regex.txt', 'r') as file:
         fileregex = file.read().splitlines()
-
-    # Prompt user for needed inputs to run the search:
-    #workorder = input("Enter the WO: ")
-    #packbatch = input("Enter the Package Batch: ")
-    #masterbatch = input("Enter the Master Batch: ")
-    #environ = input("Enter the Environment ('Test' or 'Prod'): ")[0].lower()
 
     # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
     if environ == 'Test':
@@ -46,10 +40,13 @@ def mainmethod(workorder, packbatch, masterbatch, environ):
             filecontents.update({str(filedata): file})
 
     # Create regular expressions out of workorder, packbatch, and masterbatch
-    workorder_regex = re.compile(workorder)
-    packbatch_regex = re.compile(packbatch)
-    masterbatch_regex = re.compile(masterbatch)
-    regex_list = [workorder_regex, packbatch_regex, masterbatch_regex]
+    regex_list = []
+    if workorder != '':
+        regex_list.append(re.compile(workorder))
+    if packbatch != '':
+        regex_list.append(re.compile(packbatch))
+    if masterbatch != '':
+        regex_list.append(re.compile(masterbatch))
 
     # Iterate through each regex and use it to search in each candidate file for a match.
     results = []
@@ -59,5 +56,3 @@ def mainmethod(workorder, packbatch, masterbatch, environ):
                 results.append(filecontents.get(text))
 
     return(results)
-
-#mainmethod()
