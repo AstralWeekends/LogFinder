@@ -22,10 +22,14 @@ while True:
     if event in (None, 'Cancel'):
         break
     if event == 'Run':
-        results = logfinder.mainmethod(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
-        if len(results) == 0:
-            print("Search complete, no logs found.")
+        if (values['_WO_'] == '' and values['_PACKBATCH_'] == '' and values['_MASTERBATCH_'] == ''):
+            print('Nothing to find.')
         else:
+            results = logfinder.hunt(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
             results = list(dict.fromkeys(results))
-            print(results)
+            if len(results) == 0:
+                print("No results found")
+            else:
+                print(results)
+
 window.close()
