@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import fnmatch
 import re
 
@@ -10,21 +11,21 @@ def testmethod(wo_num, pb_num, mb_num, environ):
 
 def hunt(workorder, packbatch, masterbatch, environ):
     # Create a list of file regexes to use for search, read in from external file.
-    with open('/home/alec/Documents/Python/Log-Finder/log-regex.txt', 'r') as file:
+    with open('log-regex.txt', 'r') as file:
         fileregex = file.read().splitlines()
 
     # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
     if environ == 'Test':
-        searchdir = '/home/alec/Documents/Python/Log-Finder/Test/'
+        searchdir = Path('Test/')
     elif environ == 'Prod':
-        searchdir = '/home/alec/Documents/Python/Log-Finder/Prod/'
+        searchdir = Path('Prod/')
 
     # Create a list of files in the directory which match one of the regexes in log-regex.txt
     filelist = []
     for regex in fileregex:
         for file in os.listdir(searchdir):
             if fnmatch.fnmatch(file, regex):
-                filelist.append(searchdir + file)
+                filelist.append(str(searchdir/file))
 
     # Check to make sure at least 1 file in the directory matched a file regex:
     if len(filelist) < 1:
