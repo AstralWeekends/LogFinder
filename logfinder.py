@@ -3,12 +3,6 @@ from pathlib import Path
 import fnmatch
 import re
 
-def testmethod(wo_num, pb_num, mb_num, environ):
-    print("Work Order: " + wo_num)
-    print("Package Batch: " + pb_num)
-    print("Master Batch: " + mb_num)
-    print("Environment: " + environ)
-
 def hunt(workorder, packbatch, masterbatch, environ):
     # Create a list of file regexes to use for search, read in from external file.
     with open('log-regex.txt', 'r') as file:
