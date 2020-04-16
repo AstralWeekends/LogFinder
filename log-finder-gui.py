@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import shelve
 import logfinder
 
 # color theme, use sg.theme_previewer() to see all theme options
