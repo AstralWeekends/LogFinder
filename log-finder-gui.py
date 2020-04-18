@@ -35,7 +35,7 @@ layout = [  [sg.Menu(menu_def)],
 
 
 # Create actual window to display
-window = sg.Window('Log Finder', layout, location=(500,275)) #note: location of window specific to this computer.
+window = sg.Window('Log Finder', layout)
 
 # Event loop
 while True:
@@ -44,6 +44,7 @@ while True:
         break
     
     if event == 'Run':
+        window.FindElement('_OUTPUT_').Update('')
         if (values['_WO_'] == '' and values['_PACKBATCH_'] == '' and values['_MASTERBATCH_'] == ''):
             print('Nothing to find.')
         else:
