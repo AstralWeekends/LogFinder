@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import shelve
 import logfinder
 from pathlib import Path
+import os
 
 '''shelfFile = shelve.open(str(Path('shelf/prodpath')))
 prodPath = Path('Prod/')
@@ -69,11 +70,20 @@ while True:
     
     if not window2_active and event1 == 'Preferences':
         window2_active = True
+        if os.name == 'posix':
+            base_path = os.getcwd()    
+            prod_path = base_path/Path('Prod/')
+            test_path = base_path/Path('Test/')
+        else:
+            prod_path = Path('//scanprodfs1/Services/_Logs')
+            test_path = Path('//scantestfs1/Services/_Logs')
+            
         layout2 = [ [sg.Text('Change Search Paths:')],
-                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_')],
-                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_')],
-                    [sg.Text('_'*30)],
-                    [sg.Button('Modify File Search List')], 
+                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prod_path)],
+                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=test_path)],
+                    [sg.Text('-'*90)],
+                    [sg.Button('Modify File Search List')],
+                    [sg.Text('-'*90)], 
                     [sg.Button('Ok'), sg.Button('Cancel')] ]
         
         window2 = sg.Window('Preferences', layout2, keep_on_top=True)
@@ -83,9 +93,13 @@ while True:
         if event2 in (None, 'Cancel'):
             window2_active = False
             window2.close()
-        
+
         #TO DO
-        #if event2 = 'Ok'
+        if event2 == 'Ok':
+            print(os.getcwd())
+            print(os.name)
+            window2_active = False
+            window2.close()
 
 
 window1.close()
