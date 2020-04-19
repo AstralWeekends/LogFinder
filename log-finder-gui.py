@@ -15,6 +15,15 @@ shelfFile.close()
 
 quit()'''
 
+#Set default search paths based on OS.
+if os.name == 'posix':
+    base_path = os.getcwd()    
+    prod_path = base_path/Path('Prod/')
+    test_path = base_path/Path('Test/')
+else:
+    prod_path = Path('//scanprodfs1/Services/_Logs')
+    test_path = Path('//scantestfs1/Services/_Logs')
+
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
 
@@ -70,17 +79,10 @@ while True:
     
     if not window2_active and event1 == 'Preferences':
         window2_active = True
-        if os.name == 'posix':
-            base_path = os.getcwd()    
-            prod_path = base_path/Path('Prod/')
-            test_path = base_path/Path('Test/')
-        else:
-            prod_path = Path('//scanprodfs1/Services/_Logs')
-            test_path = Path('//scantestfs1/Services/_Logs')
             
         layout2 = [ [sg.Text('Change Search Paths:')],
-                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prod_path)],
-                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=test_path)],
+                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prod_path, disabled=True)],
+                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=test_path, disabled=True)],
                     [sg.Text('-'*90)],
                     [sg.Button('Modify File Search List')],
                     [sg.Text('-'*90)], 
