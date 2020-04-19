@@ -18,11 +18,19 @@ quit()'''
 #Set default search paths based on OS.
 if os.name == 'posix':
     base_path = os.getcwd()    
+<<<<<<< HEAD
     prodpath = base_path/Path('Prod/')
     testpath = base_path/Path('Test/')
 else:
     prodpath = Path('//scanprodfs1/Services/_Logs')
     testpath = Path('//scantestfs1/Services/_Logs')
+=======
+    prod_path = base_path/Path('Prod/')
+    test_path = base_path/Path('Test/')
+else:
+    prod_path = Path('//scanprodfs1/Services/_Logs')
+    test_path = Path('//scantestfs1/Services/_Logs')
+>>>>>>> aac621e8d851f771448f5b9460617aa0f6eb0c84
 
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
