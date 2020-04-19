@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import logfinder
 from pathlib import Path
 import os
+import shelve
 
 '''shelfFile = shelve.open(str(Path('shelf/prodpath')))
 prodPath = Path('Prod/')
