@@ -26,7 +26,11 @@ else:
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
 
-layout = [  [sg.Text("Work Order #:")],
+menu_def = [ ['File', ['Exit']],
+            ['Edit', ['Preferences']] ]
+
+layout = [  [sg.Menu(menu_def)],
+            [sg.Text("Work Order #:")],
             [sg.InputText(key='_WO_')],
             [sg.Text("Package Batch #:")],
             [sg.InputText(key='_PACKBATCH_')],
@@ -39,15 +43,16 @@ layout = [  [sg.Text("Work Order #:")],
             [sg.Button('Clear')]  ]
 
 # Create actual window to display
-window = sg.Window('Log Finder', layout, location=(500,275)) #note: location of window specific to this computer.
+window1 = sg.Window('Log Finder', layout)
+window2_active = False
 
 # Event loop
 while True:
-    event, values = window.read()
-    if event in (None, 'Cancel'):
+    event1, values1 = window1.read()
+    if event1 in (None, 'Exit'):
         break
-    if event == 'Run':
-        if (values['_WO_'] == '' and values['_PACKBATCH_'] == '' and values['_MASTERBATCH_'] == ''):
+    if event1 == 'Run':
+        if (values1['_WO_'] == '' and values1['_PACKBATCH_'] == '' and values1['_MASTERBATCH_'] == ''):
             print('Nothing to find.')
         else:
             results = logfinder.hunt(values1['_WO_'], values1['_PACKBATCH_'], values1['_MASTERBATCH_'], values1['_ENVIRONMENT_'], prodpath, testpath)
@@ -70,8 +75,8 @@ while True:
         window2_active = True
             
         layout2 = [ [sg.Text('Change Search Paths:')],
-                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prod_path, disabled=True)],
-                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=test_path, disabled=True)],
+                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prodpath, disabled=True)],
+                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=testpath, disabled=True)],
                     [sg.Text('-'*90)],
                     [sg.Button('Modify File Search List')],
                     [sg.Text('-'*90)], 
@@ -92,4 +97,4 @@ while True:
             window2_active = False
             window2.close()
 
-window.close()
+window1.close()
