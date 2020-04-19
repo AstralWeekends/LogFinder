@@ -3,16 +3,16 @@ from pathlib import Path
 import fnmatch
 import re
 
-def hunt(workorder, packbatch, masterbatch, environ):
+def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
     # Create a list of file regexes to use for search, read in from external file.
     with open('log-regex.txt', 'r') as file:
         fileregex = file.read().splitlines()
 
     # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
     if environ == 'Test':
-        searchdir = Path('Test/')
+        searchdir = testpath
     elif environ == 'Prod':
-        searchdir = Path('Prod/')
+        searchdir = prodpath
 
     # Create a list of files in the directory which match one of the regexes in log-regex.txt
     filelist = []
