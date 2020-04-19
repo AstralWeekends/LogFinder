@@ -46,6 +46,7 @@ layout = [  [sg.Menu(menu_def)],
 # Create actual window to display
 window1 = sg.Window('Log Finder', layout)
 window2_active = False
+window3_active = False
 
 # Event loop
 while True:
@@ -97,5 +98,18 @@ while True:
             print(os.name)
             window2_active = False
             window2.close()
+    
+    if not window3_active and event2 == 'Modify File Search List':
+        window3_active = True
+
+        layout3 = [ [sg.Listbox(values=['File1', 'File2'], key='_FILELIST_', size=(30, 10))] ]
+
+        window3 = sg.Window('Edit File Search List', layout3, keep_on_top=True)
+    
+    if window3_active:
+        event3, values3 = window3.Read()
+        if event3 in (None, 'Cancel'):
+            window3_active = False
+            window3.close()
 
 window1.close()
