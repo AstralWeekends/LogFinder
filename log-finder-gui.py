@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-import shelve
 import logfinder
 from pathlib import Path
 import os
@@ -27,11 +26,7 @@ else:
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
 
-menu_def = [ ['File', ['Exit']],
-            ['Edit', ['Preferences']] ]
-
-layout1 = [  [sg.Menu(menu_def)],
-            [sg.Text("Work Order #:")],
+layout = [  [sg.Text("Work Order #:")],
             [sg.InputText(key='_WO_')],
             [sg.Text("Package Batch #:")],
             [sg.InputText(key='_PACKBATCH_')],
@@ -43,22 +38,16 @@ layout1 = [  [sg.Menu(menu_def)],
             [sg.Output(size =(90, 10), key='_OUTPUT_')],
             [sg.Button('Clear')]  ]
 
-
 # Create actual window to display
-window1 = sg.Window('Log Finder', layout1)
-
-#Staging the Edit > Preference window active flag for later.
-window2_active = False
+window = sg.Window('Log Finder', layout, location=(500,275)) #note: location of window specific to this computer.
 
 # Event loop
 while True:
-    event1, values1 = window1.read()
-    if event1 in (None, 'Exit'):
+    event, values = window.read()
+    if event in (None, 'Cancel'):
         break
-    
-    if event1 == 'Run':
-        window1.FindElement('_OUTPUT_').Update('')
-        if (values1['_WO_'] == '' and values1['_PACKBATCH_'] == '' and values1['_MASTERBATCH_'] == ''):
+    if event == 'Run':
+        if (values['_WO_'] == '' and values['_PACKBATCH_'] == '' and values['_MASTERBATCH_'] == ''):
             print('Nothing to find.')
         else:
             results = logfinder.hunt(values1['_WO_'], values1['_PACKBATCH_'], values1['_MASTERBATCH_'], values1['_ENVIRONMENT_'], prodpath, testpath)
@@ -103,5 +92,4 @@ while True:
             window2_active = False
             window2.close()
 
-
-window1.close()
+window.close()
