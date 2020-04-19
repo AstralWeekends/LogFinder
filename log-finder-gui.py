@@ -18,9 +18,9 @@ quit()'''
 sg.theme('BrightColors')
 
 menu_def = [ ['File', ['Exit']],
-            ['Edit', ['Search Paths']] ]
+            ['Edit', ['Preferences']] ]
 
-layout = [  [sg.Menu(menu_def)],
+layout1 = [  [sg.Menu(menu_def)],
             [sg.Text("Work Order #:")],
             [sg.InputText(key='_WO_')],
             [sg.Text("Package Batch #:")],
@@ -28,36 +28,64 @@ layout = [  [sg.Menu(menu_def)],
             [sg.Text("Master Batch #:")],
             [sg.InputText(key='_MASTERBATCH_')],
             [sg.Text("Environment:"), sg.Combo(['Prod', 'Test'], key='_ENVIRONMENT_', default_value='Prod')],
-            [sg.Button('Run'), sg.Button('Cancel')],
+            [sg.Button('Run'), sg.Button('Reset')],
             [sg.Text("Output:")], 
             [sg.Output(size =(90, 10), key='_OUTPUT_')],
             [sg.Button('Clear')]  ]
 
 
 # Create actual window to display
-window = sg.Window('Log Finder', layout)
+window1 = sg.Window('Log Finder', layout1)
+
+#Staging the Edit > Preference window active flag for later.
+window2_active = False
 
 # Event loop
 while True:
-    event, values = window.read()
-    if event in (None, 'Cancel', 'Exit'):
+    event1, values1 = window1.read()
+    if event1 in (None, 'Exit'):
         break
     
-    if event == 'Run':
-        window.FindElement('_OUTPUT_').Update('')
-        if (values['_WO_'] == '' and values['_PACKBATCH_'] == '' and values['_MASTERBATCH_'] == ''):
+    if event1 == 'Run':
+        window1.FindElement('_OUTPUT_').Update('')
+        if (values1['_WO_'] == '' and values1['_PACKBATCH_'] == '' and values1['_MASTERBATCH_'] == ''):
             print('Nothing to find.')
         else:
-            results = logfinder.hunt(values['_WO_'], values['_PACKBATCH_'], values['_MASTERBATCH_'], values['_ENVIRONMENT_'])
+            results = logfinder.hunt(values1['_WO_'], values1['_PACKBATCH_'], values1['_MASTERBATCH_'], values1['_ENVIRONMENT_'])
             results = list(dict.fromkeys(results))
             if len(results) == 0:
                 print("No results found")
             else:
                 print(results)
     
-    #elif event == 'Search Paths':
-    elif event == 'Clear':
-        window.FindElement('_OUTPUT_').Update('')
+    elif event1 == 'Reset':
+        window1.FindElement('_OUTPUT_').Update('')
+        window1.FindElement('_WO_').Update('')
+        window1.FindElement('_PACKBATCH_').Update('')
+        window1.FindElement('_MASTERBATCH_').Update('')
+
+    elif event1 == 'Clear':
+        window1.FindElement('_OUTPUT_').Update('')
+    
+    if not window2_active and event1 == 'Preferences':
+        window2_active = True
+        layout2 = [ [sg.Text('Change Search Paths:')],
+                    [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_')],
+                    [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_')],
+                    [sg.Text('_'*30)],
+                    [sg.Button('Modify File Search List')], 
+                    [sg.Button('Ok'), sg.Button('Cancel')] ]
+        
+        window2 = sg.Window('Preferences', layout2, keep_on_top=True)
+    
+    if window2_active:
+        event2, values2 = window2.Read()
+        if event2 in (None, 'Cancel'):
+            window2_active = False
+            window2.close()
+        
+        #TO DO
+        #if event2 = 'Ok'
 
 
-window.close()
+window1.close()
