@@ -55,6 +55,7 @@ while True:
     if event1 in (None, 'Exit'):
         break
     if event1 == 'Run':
+        window1.FindElement('_OUTPUT_').Update('')
         if (values1['_WO_'] == '' and values1['_PACKBATCH_'] == '' and values1['_MASTERBATCH_'] == ''):
             print('Nothing to find.')
         else:
