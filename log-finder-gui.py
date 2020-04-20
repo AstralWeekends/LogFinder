@@ -8,7 +8,7 @@ prodPath = Path('Prod/')
 shelfFile['prodPath'] = str(prodPath)
 shelfFile.close()
 
-shelfFile = shelve.open(str(Path('shelf/prodpath')))
+shelfFile = shelve.open(str(Path('shelf/prodpath')))    
 print(list(shelfFile.values()))
 shelfFile.close()
 
@@ -45,6 +45,9 @@ layout = [  [sg.Menu(menu_def)],
 # Create actual window to display
 window1 = sg.Window('Log Finder', layout)
 window2_active = False
+event2 = ''
+window3_active = False
+event3 = ''
 
 # Event loop
 while True:
@@ -56,19 +59,21 @@ while True:
             print('Nothing to find.')
         else:
             results = logfinder.hunt(values1['_WO_'], values1['_PACKBATCH_'], values1['_MASTERBATCH_'], values1['_ENVIRONMENT_'], prodpath, testpath)
-            results = list(dict.fromkeys(results))
-            if len(results) == 0:
+            if (results is None or len(results) == 0):
                 print("No results found")
+                continue;
             else:
+                results = list(dict.fromkeys(results))
                 print('\n'.join(results))
+                continue;
     
-    elif event1 == 'Reset':
+    if event1 == 'Reset':
         window1.FindElement('_OUTPUT_').Update('')
         window1.FindElement('_WO_').Update('')
         window1.FindElement('_PACKBATCH_').Update('')
         window1.FindElement('_MASTERBATCH_').Update('')
 
-    elif event1 == 'Clear':
+    if event1 == 'Clear':
         window1.FindElement('_OUTPUT_').Update('')
     
     if not window2_active and event1 == 'Preferences':
@@ -90,11 +95,25 @@ while True:
             window2_active = False
             window2.close()
 
-        #TO DO
         if event2 == 'Ok':
-            print(os.getcwd())
-            print(os.name)
             window2_active = False
             window2.close()
+    
+    if not window3_active and event2 == 'Modify File Search List':
+        window3_active = True
+
+        layout3 = [ [sg.Text('File Regex List:')],
+                    [sg.Multiline(default_text=logfinder.listrefresh(), key='_FILELIST_', size=(30, 10)), sg.Button('Save List')] ]
+
+        window3 = sg.Window('Edit File Search List', layout3, keep_on_top=True)
+    
+    if window3_active:
+        event3, values3 = window3.Read()
+        if event3 in (None, 'Cancel'):
+            window3_active = False
+            window3.close()
+        
+        if event3 == 'Save List':
+            logfinder.listsave(values3['_FILELIST_'])
 
 window1.close()
