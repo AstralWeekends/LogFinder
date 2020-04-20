@@ -2,11 +2,15 @@ import os
 from pathlib import Path
 import fnmatch
 import re
+import shelve
 
 def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
     # Create a list of file regexes to use for search, read in from external file.
-    with open('log-regex.txt', 'r') as file:
-        fileregex = file.read().splitlines()
+    shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
+    fileregex = list(shelfFile.values())
+    fileregex = [y for x in fileregex for y in x.split('\n')]
+    fileregex.pop(-1)
+    shelfFile.close()
 
     # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
     if environ == 'Test':
@@ -23,9 +27,7 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
 
     # Check to make sure at least 1 file in the directory matched a file regex:
     if len(filelist) < 1:
-        print("There were no matching service files found.\n" +
-            "Please modify log-regex.txt to include additional search strings if needed.")
-        quit()
+        return
 
     # Write contents of files matching target regex to a dictionary {content_of_file: absolute_path_to_file}:
     filecontents = dict()
@@ -51,3 +53,15 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
                 results.append(filecontents.get(text))
 
     return(results)
+
+def listrefresh():
+    shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
+    filelist = list(shelfFile.values())
+    shelfFile.close()
+    return('\n'.join(filelist))
+
+def listsave(list_input):
+    shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
+    shelfFile['list_input'] = list_input
+    shelfFile.close()
+
