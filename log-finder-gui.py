@@ -62,11 +62,11 @@ while True:
             results = logfinder.hunt(values1['_WO_'], values1['_PACKBATCH_'], values1['_MASTERBATCH_'], values1['_ENVIRONMENT_'], prodpath, testpath)
             if (results is None or len(results) == 0):
                 print("No results found")
-                continue;
+                continue
             else:
                 results = list(dict.fromkeys(results))
                 print('\n'.join(results))
-                continue;
+                continue
     
     if event1 == 'Reset':
         window1.FindElement('_OUTPUT_').Update('')

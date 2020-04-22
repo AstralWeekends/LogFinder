@@ -23,7 +23,7 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
     for regex in fileregex:
         for file in os.listdir(searchdir):
             if fnmatch.fnmatch(file, regex):
-                filelist.append(str(searchdir/file))
+                filelist.append(str(searchdir + '/' + file))
 
     # Check to make sure at least 1 file in the directory matched a file regex:
     if len(filelist) < 1:
