@@ -2,26 +2,26 @@ import PySimpleGUI as sg
 import logfinder
 from pathlib import Path
 import os
+from os import path
+import shelve
 
-'''shelfFile = shelve.open(str(Path('shelf/prodpath')))
-prodPath = Path('Prod/')
-shelfFile['prodPath'] = str(prodPath)
-shelfFile.close()
+#Set default search paths based on OS if shelf file containing previous paths doesn't exist yet.
 
-shelfFile = shelve.open(str(Path('shelf/prodpath')))    
-print(list(shelfFile.values()))
-shelfFile.close()
+if path.exists(Path('shelf/paths')):
+    pathShelf = shelve.open((str(Path('shelf/paths'))))
+    prodpath = pathShelf['prodpath']
+    testpath = pathShelf['testpath']
+    pathShelf.close()
 
-quit()'''
-
-#Set default search paths based on OS.
-if os.name == 'posix':
+elif os.name == 'posix':
+    print("Didn't find a shelf file")
     base_path = os.getcwd()    
     prodpath = base_path/Path('Prod/')
     testpath = base_path/Path('Test/')
+
 else:
     prodpath = Path('//scanprodfs1/Services/_Logs')
-    testpath = Path('//scantestfs1/Services/_Logs')
+    testpath = Path('//scantestapps1/Services/_Logs')
 
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
@@ -97,6 +97,7 @@ while True:
             window2.close()
 
         if event2 == 'Ok':
+            logfinder.savepaths(values2['_PRODPATH_'], values2['_TESTPATH_'])
             window2_active = False
             window2.close()
     

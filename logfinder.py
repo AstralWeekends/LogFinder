@@ -65,3 +65,8 @@ def listsave(list_input):
     shelfFile['list_input'] = list_input
     shelfFile.close()
 
+def savepaths(prodpath, testpath):
+    pathShelf = shelve.open((str(Path('shelf/paths'))))
+    pathShelf['prodpath'] = prodpath
+    pathShelf['testpath'] = testpath
+    pathShelf.close()
