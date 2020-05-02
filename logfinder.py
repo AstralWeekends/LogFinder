@@ -58,7 +58,8 @@ def listrefresh():
     shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
     filelist = list(shelfFile.values())
     shelfFile.close()
-    return('\n'.join(filelist))
+    refreshed = ('\n'.join(filelist))
+    return(refreshed.rstrip('\n'))
 
 def listsave(list_input):
     shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
