@@ -6,22 +6,6 @@ from os import path
 import shelve
 
 #Set default search paths based on OS if shelf file containing previous paths doesn't exist yet.
-
-'''if path.exists(Path('shelf/paths')):
-    pathShelf = shelve.open((str(Path('shelf/paths'))))
-    prodpath = pathShelf['prodpath']
-    testpath = pathShelf['testpath']
-    pathShelf.close()
-
-elif os.name == 'posix':
-    base_path = os.getcwd()    
-    prodpath = base_path/Path('Prod/')
-    testpath = base_path/Path('Test/')
-
-else:
-    prodpath = Path('//scanprodfs1/Services/_Logs')
-    testpath = Path('//scantestapps1/Services/_Logs')'''
-
 pathlist = logfinder.pullpaths()
 prodpath = pathlist[0]
 testpath = pathlist[1]
@@ -54,7 +38,7 @@ event3 = ''
 
 # Event loop
 while True:
-    event1, values1 = window1.read(timeout=500)
+    event1, values1 = window1.read(timeout=1000)
     if event1 in (None, 'Exit'):
         break
     if event1 == 'Run':
