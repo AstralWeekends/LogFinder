@@ -30,7 +30,7 @@ layout = [  [sg.Menu(menu_def)],
             [sg.Button('Clear')]  ]
 
 # Create actual window to display
-window1 = sg.Window('Log Finder', layout)
+window1 = sg.Window('Log Finder', layout, icon='logfinder.png')
 window2_active = False
 event2 = ''
 window3_active = False
