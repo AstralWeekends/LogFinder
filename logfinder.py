@@ -1,4 +1,5 @@
 import os
+from os import path
 from pathlib import Path
 import fnmatch
 import re
@@ -71,3 +72,23 @@ def savepaths(prodpath, testpath):
     pathShelf['prodpath'] = prodpath
     pathShelf['testpath'] = testpath
     pathShelf.close()
+
+def pullpaths():
+    if path.exists(Path('shelf/paths')):
+        pathShelf = shelve.open((str(Path('shelf/paths'))))
+        prodpath = pathShelf['prodpath']
+        testpath = pathShelf['testpath']
+        pathShelf.close()
+
+    elif os.name == 'posix':
+        base_path = os.getcwd()    
+        prodpath = base_path/Path('Prod/')
+        testpath = base_path/Path('Test/')
+
+    else:
+        prodpath = Path('//scanprodfs1/Services/_Logs')
+        testpath = Path('//scantestapps1/Services/_Logs')
+    
+    paths = [prodpath, testpath]
+    return(paths)
+

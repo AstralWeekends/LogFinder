@@ -7,21 +7,24 @@ import shelve
 
 #Set default search paths based on OS if shelf file containing previous paths doesn't exist yet.
 
-if path.exists(Path('shelf/paths')):
+'''if path.exists(Path('shelf/paths')):
     pathShelf = shelve.open((str(Path('shelf/paths'))))
     prodpath = pathShelf['prodpath']
     testpath = pathShelf['testpath']
     pathShelf.close()
 
 elif os.name == 'posix':
-    print("Didn't find a shelf file")
     base_path = os.getcwd()    
     prodpath = base_path/Path('Prod/')
     testpath = base_path/Path('Test/')
 
 else:
     prodpath = Path('//scanprodfs1/Services/_Logs')
-    testpath = Path('//scantestapps1/Services/_Logs')
+    testpath = Path('//scantestapps1/Services/_Logs')'''
+
+pathlist = logfinder.pullpaths()
+prodpath = pathlist[0]
+testpath = pathlist[1]
 
 # color theme, use sg.theme_previewer() to see all theme options
 sg.theme('BrightColors')
@@ -98,6 +101,9 @@ while True:
 
         if event2 == 'Ok':
             logfinder.savepaths(values2['_PRODPATH_'], values2['_TESTPATH_'])
+            pathlist = logfinder.pullpaths()
+            prodpath = pathlist[0]
+            testpath = pathlist[1]
             window2_active = False
             window2.close()
     
@@ -114,7 +120,6 @@ while True:
         if event3 in (None, 'Cancel'):
             window3_active = False
             window3.close()
-            window2_active = True
         
         if event3 == 'Save List':
             logfinder.listsave(values3['_FILELIST_'])
