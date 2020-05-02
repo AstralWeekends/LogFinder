@@ -13,11 +13,19 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
     fileregex.pop(-1)
     shelfFile.close()
 
-    # TO DO: Set absolute path based on environment selected. Could update to read path parameters from a file instead.
     if environ == 'Test':
         searchdir = testpath
     elif environ == 'Prod':
         searchdir = prodpath
+
+    # Create regular expressions out of workorder, packbatch, and masterbatch
+    regex_list = []
+    if workorder != '':
+        regex_list.append(re.compile(workorder))
+    if packbatch != '':
+        regex_list.append(re.compile(packbatch))
+    if masterbatch != '':
+        regex_list.append(re.compile(masterbatch))
 
     # Create a list of files in the directory which match one of the regexes in log-regex.txt
     filelist = []
@@ -37,15 +45,6 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
             filedata = f.read().split(", ")
             filecontents.update({str(filedata): file})
 
-    # Create regular expressions out of workorder, packbatch, and masterbatch
-    regex_list = []
-    if workorder != '':
-        regex_list.append(re.compile(workorder))
-    if packbatch != '':
-        regex_list.append(re.compile(packbatch))
-    if masterbatch != '':
-        regex_list.append(re.compile(masterbatch))
-
     # Iterate through each regex and use it to search in each candidate file for a match.
     results = []
     for regex in regex_list:
@@ -55,6 +54,7 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
 
     return(results)
 
+#Returns current list of regexes to window3.
 def listrefresh():
     shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
     filelist = list(shelfFile.values())
@@ -62,17 +62,20 @@ def listrefresh():
     refreshed = ('\n'.join(filelist))
     return(refreshed.rstrip('\n'))
 
+#Writes current content of window when user presses 'Save List' in window3.
 def listsave(list_input):
     shelfFile = shelve.open((str(Path('shelf/file-regexes'))))
     shelfFile['list_input'] = list_input
     shelfFile.close()
 
+#Writes values of prod/test paths when users presses 'Ok' in window2.
 def savepaths(prodpath, testpath):
     pathShelf = shelve.open((str(Path('shelf/paths'))))
     pathShelf['prodpath'] = prodpath
     pathShelf['testpath'] = testpath
     pathShelf.close()
 
+#When user starts program or saves new paths in windows2, gets new path values for program.
 def pullpaths():
     if path.exists(Path('shelf/paths')):
         pathShelf = shelve.open((str(Path('shelf/paths'))))
