@@ -47,12 +47,16 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
 
     # Iterate through each regex and use it to search in each candidate file for a match.
     results = []
+    progress_counter = len(filecontents)
     for regex in regex_list:
         for text in filecontents:
+            progress_counter = progress_counter - 1
+            print(progress_counter)
             if re.search(regex, text):
                 results.append(filecontents.get(text))
 
     return(results)
+
 
 #Returns current list of regexes to window3.
 def listrefresh():

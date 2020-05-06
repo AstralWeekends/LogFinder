@@ -1,3 +1,9 @@
+'''TO DO: Add a progress meter when the Run button is pressed. To make progress meter reflect the
+amount of work left to do, try this: in the last 'for' loop of the hunt() method, 
+create an int that stores the length of regex_list. After each iteration of the loop, 
+subtract 1 from the int. As the int approaches 0, the progress meter approaches 100%
+'''
+
 import PySimpleGUI as sg
 import logfinder
 from pathlib import Path
@@ -38,7 +44,7 @@ event3 = ''
 
 # Event loop
 while True:
-    event1, values1 = window1.read(timeout=1000)
+    event1, values1 = window1.read(timeout=350)
     if event1 in (None, 'Exit'):
         break
     if event1 == 'Run':
@@ -78,7 +84,7 @@ while True:
         window2 = sg.Window('Preferences', layout2, keep_on_top=True)
     
     if window2_active:
-        event2, values2 = window2.Read(timeout=500)
+        event2, values2 = window2.Read(timeout=350)
         if event2 in (None, 'Cancel'):
             window2_active = False
             window2.close()
@@ -100,7 +106,7 @@ while True:
         window3 = sg.Window('Edit File Search List', layout3, keep_on_top=True)
     
     if window3_active:
-        event3, values3 = window3.Read(timeout=500)
+        event3, values3 = window3.Read(timeout=350)
         if event3 in (None, 'Cancel'):
             window3_active = False
             window3.close()
