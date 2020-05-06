@@ -4,3 +4,9 @@ ScanOneOperations*.log
 shelf/file-regexes
 shelf/paths
 
+Prod/MOCK_DATA_1.txt
+Prod/MOCK_DATA_2.txt
+Prod/MOCK_DATA_3.txt
+Prod/MOCK_DATA_4.txt
+Prod/MOCK_DATA_5.txt
+Prod/MOCK_DATA_6.txt
