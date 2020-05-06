@@ -44,7 +44,7 @@ event3 = ''
 
 # Event loop
 while True:
-    event1, values1 = window1.read(timeout=350)
+    event1, values1 = window1.read(timeout=400)
     if event1 in (None, 'Exit'):
         break
     if event1 == 'Run':

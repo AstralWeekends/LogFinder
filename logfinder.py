@@ -4,6 +4,7 @@ from pathlib import Path
 import fnmatch
 import re
 import shelve
+import PySimpleGUI as sg
 
 def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
     # Create a list of file regexes to use for search, read in from external file.
@@ -40,18 +41,21 @@ def hunt(workorder, packbatch, masterbatch, environ, prodpath, testpath):
 
     # Write contents of files matching target regex to a dictionary {content_of_file: absolute_path_to_file}:
     filecontents = dict()
+    progress_counter1 = 0
     for file in filelist:
         with open(file) as f:
             filedata = f.read().split(", ")
             filecontents.update({str(filedata): file})
+            progress_counter1 = progress_counter1 + 1
+            sg.OneLineProgressMeter('Reading Files...', progress_counter1, len(filelist), key='progress1')
 
     # Iterate through each regex and use it to search in each candidate file for a match.
     results = []
-    progress_counter = len(filecontents)
+    progress_counter2 = 0
     for regex in regex_list:
         for text in filecontents:
-            progress_counter = progress_counter - 1
-            print(progress_counter)
+            progress_counter2 = progress_counter2+ 1
+            sg.OneLineProgressMeter('Checking for Matches...', progress_counter2, len(filecontents), key='progress2')
             if re.search(regex, text):
                 results.append(filecontents.get(text))
 
