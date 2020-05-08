@@ -1,9 +1,3 @@
-'''TO DO: Add a progress meter when the Run button is pressed. To make progress meter reflect the
-amount of work left to do, try this: in the last 'for' loop of the hunt() method, 
-create an int that stores the length of regex_list. After each iteration of the loop, 
-subtract 1 from the int. As the int approaches 0, the progress meter approaches 100%
-'''
-
 import PySimpleGUI as sg
 import logfinder
 from pathlib import Path
