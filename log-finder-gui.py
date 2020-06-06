@@ -25,7 +25,7 @@ layout = [  [sg.Menu(menu_def)],
             [sg.InputText(key='_MASTERBATCH_')],
             [sg.Text("Environment:"), sg.Combo(['Prod', 'Test'], key='_ENVIRONMENT_', default_value='Test')],
             [sg.Button('Run'), sg.Button('Reset')],
-            [sg.Text("Output:")], 
+            [sg.Text("Output:")],
             [sg.Output(size =(90, 10), key='_OUTPUT_')],
             [sg.Button('Clear')]  ]
 
@@ -54,7 +54,7 @@ while True:
                 results = list(dict.fromkeys(results))
                 print('\n'.join(results))
                 continue
-    
+
     if event1 == 'Reset':
         window1.FindElement('_OUTPUT_').Update('')
         window1.FindElement('_WO_').Update('')
@@ -63,20 +63,20 @@ while True:
 
     if event1 == 'Clear':
         window1.FindElement('_OUTPUT_').Update('')
-    
+
     if not window2_active and event1 == 'Preferences':
         window2_active = True
-            
+
         layout2 = [ [sg.Text('Change Search Paths:')],
                     [sg.FolderBrowse('Prod', target='_PRODPATH_'), sg.Input(key='_PRODPATH_', default_text=prodpath, disabled=True)],
                     [sg.FolderBrowse('Test', target='_TESTPATH_'), sg.Input(key='_TESTPATH_', default_text=testpath, disabled=True)],
                     [sg.Text('-'*90)],
                     [sg.Button('Modify File Search List')],
-                    [sg.Text('-'*90)], 
+                    [sg.Text('-'*90)],
                     [sg.Button('Ok'), sg.Button('Cancel')] ]
-        
+
         window2 = sg.Window('Preferences', layout2, keep_on_top=True)
-    
+
     if window2_active:
         event2, values2 = window2.Read(timeout=350)
         if event2 in (None, 'Cancel'):
@@ -90,7 +90,7 @@ while True:
             testpath = pathlist[1]
             window2_active = False
             window2.close()
-    
+
     if not window3_active and event2 == 'Modify File Search List':
         window3_active = True
 
@@ -98,13 +98,13 @@ while True:
                     [sg.Multiline(default_text=logfinder.listrefresh(), key='_FILELIST_', size=(30, 10)), sg.Button('Save List')] ]
 
         window3 = sg.Window('Edit File Search List', layout3, keep_on_top=True)
-    
+
     if window3_active:
         event3, values3 = window3.Read(timeout=350)
         if event3 in (None, 'Cancel'):
             window3_active = False
             window3.close()
-        
+
         if event3 == 'Save List':
             logfinder.listsave(values3['_FILELIST_'])
             window3_active = False
